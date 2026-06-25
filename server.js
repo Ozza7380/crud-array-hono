@@ -56,7 +56,7 @@ app.put(`/api/items/:id`, async (c) => {
     const id = Number(c.req.param(`id`))
     const body = await c.req.json()
 
-    const index = items.findIndex((i) => i.id === id)
+    const index = items.findIndex((i) => i.id === id) //findindex() cari posisi item di array
 
     if (index === -1) {
         return c.json({ error: true, massage: `ite tidak ditemukan` }, 404)
@@ -67,6 +67,20 @@ app.put(`/api/items/:id`, async (c) => {
     if (body.status !== undefined) items[index].status = body.status
 
     return c.json({ error: false, data: items[index] })
+})
+
+//menghapus data(delete)-delete
+app.delete(`api/items/:id`, (c) => {
+    const id = Number(c.req.param(`id`))
+    const index = items.findIndex((i) => i.id === id)
+
+    if (index === -1) {
+        returnc.json({error: true, massage: `item tidak ditemukan`}, 404)
+    }
+
+    const deleted = items.splice(index, 1)[0]
+
+    return c.json({error: false, massage: `item "${deleted.nama}" berhasil dihapus`})
 })
 
 serve({ fetch: app.fetch, port:3000  })
