@@ -12,6 +12,7 @@ let nextId = 3
 
 const app = new Hono()
 
+//membaca data (read)
 app.get(`/api/items`, (c) => {
     return c.json({eror: false, data: items})
 })
