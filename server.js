@@ -16,7 +16,7 @@ const app = new Hono()
 
 //read all
 app.get(`/api/items`, (c) => {
-    return c.json({eror: false, data: items})
+    return c.json({error: false, data: items})
 })
 
 //read one
@@ -29,6 +29,26 @@ app.get(`/api/items/:id`, (c) => {
     }
 
     return c.json({ error:false, data: item })
+})
+
+//menambahkan data (create) -post
+app.post(`/api/items`, async (c) => {
+    const body = await c.req.json()
+
+    //validasi sederhana
+    if (!body.nama) {
+        return c.json({error: true, massage: `Field nama wajib diisi`}, 404)
+    }
+
+    const itemBaru = {
+        id: nextId++,
+        nama: body.nama,
+        status: body.status || `belum`
+    }
+
+    items.push(itemBaru)
+
+    return c.json({ error: false, data: itemBaru }, 201)
 })
 
 serve({ fetch: app.fetch, port:3000  })
